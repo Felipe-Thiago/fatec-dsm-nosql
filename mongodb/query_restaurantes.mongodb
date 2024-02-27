@@ -1,0 +1,107 @@
+use('Exercicio')
+
+//1. exibir todos os documentos da collection restaurante
+db.restaurantes.find({}, {})
+
+//2. exibir os campos restaurante_id, nome, bairro e cozinha
+use('Exercicio')
+db.restaurantes.find({}, {restaurante_id:1, nome:1, bairro:1, cozinha:1})
+
+/*3. exibir os campos restaurante_id, nome, bairro e cozinha
+excluindo o campo _id*/
+use('Exercicio')
+db.restaurantes.find({}, {_id: 0, restaurante_id:1, nome:1, bairro: 1, cozinha:1})
+
+/*4. exibir os campos restaurante_id, nome, bairro e cep
+excluindo o campo _id*/
+use('Exercicio')
+db.restaurantes.find({}, {_id: 0, restaurante_id:1, nome:1, bairro:1, 'endereço.cep':1})
+
+//5. exibir todos os restaurantes localizados no bairro Bronx
+use('Exercicio')
+db.restaurantes.find({bairro: 'Bronx'}, {_id:0, restaurante_id:1, nome:1, bairro:1, cozinha:1})
+
+//6. exibir os 5 primeiros restaurantes localizados no bairro Bronx
+use('Exercicio')
+db.restaurantes.find(
+    {bairro: 'Bronx'},
+    {_id:0, restaurante_id: 1, nome:1, bairro: 1, cozinha:1}
+    ).limit(5)
+
+//7. exibir os 5 primeiros restaurantes após pular os primeiros 5 no bairro Bronx
+use('Exercicio')
+db.restaurantes.find(
+    {bairro: 'Bronx'},
+    {_id:0, restaurante_id: 1, nome:1, bairro:1, cozinha:1}
+    ).limit(5)
+    .skip(5)
+
+//8. exibir todos os restaurantes que obtiveram uma avaliação maior que 90 pontos
+use('Exercicio')
+db.restaurantes.find(
+    {'avaliações.pontos':{$gt: 90}},
+    {_id:0, restaurante_id: 1, nome: 1, cozinha:1, 'avaliações.pontos':1}
+)
+
+//9. exibir todos os restaurantes que obtiveram uma avaliação maior que 80 e menor que 100
+use('Exercicio')
+db.restaurantes.find(
+    {$and:
+        [
+            {'avaliações.pontos': {$gt: 80}},
+            {'avaliações.pontos': {$lt: 100}}
+        ]
+    },
+    {_id:0, restaurante_id: 1, nome: 1, cozinha:1, 'avaliações.pontos':1}
+)
+
+//10. exibir todos os restaurantes localizados em uma altitude menor que -95.754168
+use('Exercicio')
+db.restaurantes.find(
+    {'endereço.coord':{$lt: -95.754168}},
+    {_id: 0, restaurante_id: 1, nome: 1, cozinha: 1, 'endereço.coord':1}
+)
+
+/*11. exibir restaurantes que não são cozinha 'American'
+com pelo menos 70 pontos de avaliação e latitude menor que -65.754168*/
+use('Exercicio')
+db.restaurantes.find(
+    {$and:
+        [
+            {'avaliações.pontos': {$gte: 70}},
+            {'endereço.coord':{$lt: -65.754168}}
+        ],
+        $nor: [
+            {cozinha: 'American '}
+        ]
+    },
+    {_id: 0, restaurante_id: 1, nome: 1, cozinha: 1, 'avaliações.pontos':1, 'endereço.coord':1}
+)
+
+/*12. exibir restaurantes que não são cozinha 'American'
+com pelo menos 70 pontos de avaliação e latitude menor que -65.754168
+sem utilizar $and*/
+use('Exercicio')
+db.restaurantes.find(
+    {
+        'avaliações.pontos': {$gte: 70},
+        'endereço.coord':{$lt: -65.754168},
+        $nor: [
+            {cozinha: 'American '}
+        ]
+    },
+    {_id: 0, restaurante_id: 1, nome: 1, cozinha: 1, 'avaliações.pontos':1, 'endereço.coord':1}
+)
+
+/*13. exibir restaurantes que não são cozinha 'American'
+com uma nota 'A' na avaliação
+que não pertençam ao bairro Brooklyn
+em ordem decrescente */
+use('Exercicio')
+db.restaurantes.find(
+    {
+        $nor: [
+            {cozinha: 'American '}
+        ]
+},{}
+)
